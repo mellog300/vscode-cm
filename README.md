@@ -42,6 +42,14 @@ The following commands are available:
 - CM: Load All Known - `CTRL + ALT + Y`
 - CM: Start writing output to file - `N/A`
 - CM: Stops writing output contents to file - `N/A`
+- CM: Clean CMX - `N/A`
+
+## CMX Macros
+
+- `$parentPackageName` - Replaces the placeholder with the name of the parent package from the CMX file;
+- `$dynamicPackageName` - Replaces the placeholder with the name of the actual package from the CMX file;
+- `$customExtensionName` or `$$` - Replaces the placeholder with the name of custom extension being coded;
+- `$rootExtensionPackage` - Replaces the placeholder with the root package for the current custom extension;
 
 ## Contributing
 

@@ -5,6 +5,7 @@
 	<key>fileTypes</key>
 	<array>
 		<string>cm</string>
+		<string>cmx</string>
 	</array>
 	<key>keyEquivalent</key>
 	<string>^~C</string>

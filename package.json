@@ -1,10 +1,10 @@
 {
   "name": "cm",
   "displayName": "CM",
-  "description": "CM Language Support",
-  "version": "1.4.1",
+  "description": "CM & CMX Language Support",
+  "version": "1.4.2",
   "icon": "resources/cmIcon.png",
-  "publisher": "docuraio",
+  "publisher": "300Softwares",
   "repository": {
     "type": "git",
     "url": "https://github.com/docura-io/vscode-cm.git"
@@ -29,7 +29,8 @@
       {
         "id": "cm",
         "extensions": [
-          ".cm"
+          ".cm",
+          ".cmx"
         ],
         "aliases": [
           "CM"
@@ -55,6 +56,12 @@
         "command": "cm.cleancm",
         "title": "Clean CM",
         "description": "Cleans the CM Compiler.",
+        "category": "CM"
+      },
+      {
+        "command": "cm.cleancmx",
+        "title": "Clean CMX",
+        "description": "Cleans the CM Compiler and removes all CM files generated from a CMX.",
         "category": "CM"
       },
       {
@@ -281,6 +288,7 @@
   "dependencies": {
     "clang-format": "^1.0.34",
     "node-cm": "git+https://github.com/docura-io/node-cm.git",
-    "semantic-release": "^15.13.3"
+    "semantic-release": "^15.13.3",
+    "yarn": "^1.17.3"
   }
 }

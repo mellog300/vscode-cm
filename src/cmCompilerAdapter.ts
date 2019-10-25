@@ -3,6 +3,7 @@
 import { cmConfig } from './cmConfig';
 import { cmOutputChannel } from './cmOutputChannel';
 import vscode = require('vscode');
+import { cmxCompiler } from "./cmxCompiler";
 import { workspace } from 'vscode';
 
 var compilerContainer = require("node-cm/index.js");
@@ -14,10 +15,14 @@ export class cmCompilerAdapter {
     private compiler;
     private isStarted: boolean = false;
     private diagnostics: vscode.DiagnosticCollection;
+    private cmxCompiler = new cmxCompiler.CmxCompiler({
+        rootDir: cmConfig.cmPath()
+    });
     
     constructor( diagnostics: vscode.DiagnosticCollection, filePath: string ) {
         this.filePath = filePath;
-        this.channel = new cmOutputChannel( diagnostics, filePath );
+        //this.channel = new cmOutputChannel( diagnostics, filePath );
+        this.channel = new cmxCompiler.CmxOutputChannel(diagnostics, filePath);
         this.diagnostics = diagnostics;
         
         this.compiler = new compilerContainer( {
@@ -76,7 +81,18 @@ export class cmCompilerAdapter {
             }, reject);
         });        
     }
-    
+
+    cleanCMX() {
+        this.clearOutputIfNeeded();
+        this.cmxCompiler.clean();
+        var results = this.compiler.clean();
+        this.channel.write("[INFO make clean-cmx:]\n");
+        this.channel.write("---------------------\n");
+        this.channel.write(results);
+        this.channel.write("---------------------\n");
+        this.channel.write("[INFO CMX Clean]\n");
+        this.isStarted = false;
+    }
     public clean() {
         // this.clearOutputIfNeeded();
         this.channel.clear();
@@ -112,6 +128,7 @@ export class cmCompilerAdapter {
             cmConfig.currentWorkspace()
             .then( path => {
                 path = path.replace( /\\/g, "/" ) + "/";
+                this.cmxCompiler.compileAll();
                 this.run( `{ use cm.runtime.util; compileAllBelow(CompileAllEnv("${path}")); }` );
             })
             // const path = cmConfig.currentWorkspace()
@@ -122,6 +139,7 @@ export class cmCompilerAdapter {
     public compileVSWorkspace() {
         this.startIfNotStarted().then( (succuess) => {
             var command = "";
+            this.cmxCompiler.compileAll();
             workspace.workspaceFolders.forEach( wf => {
                 let path = wf.uri.fsPath.replace( /\\/g, "/" ) + "/";
                 command += `compileAllBelow(CompileAllEnv("${path}"));`;
@@ -134,6 +152,7 @@ export class cmCompilerAdapter {
         this.clearOutputIfNeeded();
         this.diagnostics.clear();
         this.startIfNotStarted().then((success) => {
+            file = this.cmxCompiler.compileFile(file);
             this.compiler.compileFile( file );
         });    
     }
@@ -179,6 +198,7 @@ export class cmCompilerAdapter {
         if ( !file.endsWith("acloader.cm") ) this.clearOutputIfNeeded();
         this.diagnostics.clear();
         this.startIfNotStarted().then((success) => {
+            file = this.cmxCompiler.compileFile(file);
             this.compiler.runFile( file );
         });
     }

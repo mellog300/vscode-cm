@@ -124,6 +124,7 @@ export function registerCommands( compiler: cmCompilerAdapter ) {
             compiler.run( `cm.runtime.overridesMethod("${editor.document.fileName.replace( /\\/g, '/' )}", ${offset});` );
         })
     });
+    let d999 = commands.registerCommand("cm.cleancmx", () => compiler.cleanCMX());
 
     let d25 = commands.registerCommand( "cm.profiletest", () => {
         validateCMFileAndRun( false, (editor) => {

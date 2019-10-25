@@ -81,6 +81,7 @@ export function activate(context: ExtensionContext) {
     
     // setup watcher
     var cmWatcher = createCmWatcher();
+    var cmxWatcher = createCmxWatcher();
     var rsWatcher = createRsWatcher();
 
     window.onDidChangeActiveTextEditor( (editor) => {        
@@ -149,6 +150,10 @@ function createCmWatcher(): void {
 
 function createRsWatcher(): void {
     createWatcher( cmUtils.createResourceTemplate, "rs" );
+}
+
+function createCmxWatcher() {
+    createWatcher(cmUtils.addCopyright, "cmx");
 }
 
 function createRsSaveWatcher() {
